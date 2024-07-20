@@ -1,0 +1,30 @@
+{
+    "name": "patrick/language-panel",
+    "description": "FilamentPHP plugin to manage translations with.",
+    "version": "0.0.1",
+    "license": "MIT",
+    "require": {
+        "filament/filament": "^3.2",
+        "spatie/laravel-translation-loader": "^2.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Patrick\\LanguagePanel\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Patrick\\LanguagePanel\\LanguagePanelServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "patrick"
+        }
+    ],
+    "require-dev": {
+        "laravel/pint": "^1.16"
+    }
+}
