@@ -11,11 +11,27 @@ to store and read your data.
 
 ## Installation
 
-1. Install this package: `composer require patrick/language-panel`
-2. Load your translations using artisan: `php artisan language-panel:import`.
-3. Publish the configuration assets to further customize the options:
+- Install this package: `composer require patrick/language-panel`
+- Add Spatie's translation loader to your `config/app.php` file:
+
+```php
+    'providers' => ServiceProvider::defaultProviders()
+        ->replace([
+            TranslationServiceProvider::class => Spatie\TranslationLoader\TranslationServiceProvider::class,
+        ])->toArray(),
+```
+
+- Publish the migrations of Spatie's package and run them:
+
+```bash
+php artisan vendor:publish --provider="Spatie\TranslationLoader\TranslationServiceProvider" --tag="migrations"
+php artisan migrate
+```
+
+- Load your translations using artisan: `php artisan language-panel:import`.
+- Publish the configuration assets to further customize the options:
 `php artisan vendor:publish --tag=language-panel-config`.
-4. Publish the translations if you would like to adjust them:
+- Publish the translations if you would like to adjust them:
 `php artisan vendor:publish --tag=language-panel-lang`.
 
 ## Usage
@@ -31,3 +47,8 @@ you have imported.
 - [ ] Support vendor lines
 - [ ] Implement import and export, to excel for example.
 - [ ] Support other languages than English and Dutch.
+
+## Great alternatives
+
+- [kenepa/translation-manager](https://github.com/kenepa/translation-manager)
+- [barryvdh/laravel-translation-manager](https://github.com/barryvdh/laravel-translation-manager)
