@@ -15,9 +15,9 @@ to store and read your data.
 - Add Spatie's translation loader to your `config/app.php` file:
 
 ```php
-    'providers' => ServiceProvider::defaultProviders()
+    'providers' => Illuminate\Support\ServiceProvider::defaultProviders()
         ->replace([
-            TranslationServiceProvider::class => Spatie\TranslationLoader\TranslationServiceProvider::class,
+            Illuminate\Translation\TranslationServiceProvider::class => Spatie\TranslationLoader\TranslationServiceProvider::class,
         ])->toArray(),
 ```
 
