@@ -1,7 +1,6 @@
 {
     "name": "patrick/language-panel",
     "description": "FilamentPHP plugin to manage translations with.",
-    "version": "0.0.2",
     "license": "MIT",
     "require": {
         "filament/filament": "^3.2",
