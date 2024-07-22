@@ -10,6 +10,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\TernaryFilter;
@@ -59,26 +61,40 @@ class LanguageLineResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label(__('language-panel::form.id'))
-                    ->searchable(),
-                TextColumn::make('group')
-                    ->label(__('language-panel::form.group'))
-                    ->searchable(),
-                TextColumn::make('key')
-                    ->label(__('language-panel::form.key'))
-                    ->searchable(),
-                IconColumn::make('en')
-                    ->label('EN')
-                    ->boolean()
-                    ->state(fn (Model $record) => self::languageLineHasTranslation('en', $record)),
-                IconColumn::make('nl')
-                    ->label('NL')
-                    ->boolean()
-                    ->state(fn (Model $record) => self::languageLineHasTranslation('nl', $record)),
-                TextColumn::make('updated_at')
-                    ->date('d-m-Y')
-                    ->label(__('language-panel::form.updated_at')),
+                Split::make([
+                    TextColumn::make('id')
+                        ->label(__('language-panel::form.id'))
+                        ->searchable(),
+                    TextColumn::make('group')
+                        ->label(__('language-panel::form.group'))
+                        ->searchable(),
+                    TextColumn::make('key')
+                        ->label(__('language-panel::form.key'))
+                        ->searchable(),
+                    IconColumn::make('en')
+                        ->label('EN')
+                        ->boolean()
+                        ->state(fn (Model $record) => self::languageLineHasTranslation('en', $record)),
+                    IconColumn::make('nl')
+                        ->label('NL')
+                        ->boolean()
+                        ->state(fn (Model $record) => self::languageLineHasTranslation('nl', $record)),
+                    TextColumn::make('updated_at')
+                        ->date('d-m-Y')
+                        ->label(__('language-panel::form.updated_at')),
+                    TextColumn::make('updated_at')
+                        ->date('d-m-Y')
+                        ->label(__('language-panel::form.updated_at')),
+
+                ]),
+                Panel::make([
+                    TextColumn::make('text')
+                        ->label(__('language-panel::form.text'))
+                        ->listWithLineBreaks()
+                        ->bulleted()
+                        ->limitList(6)
+                        ->searchable(),
+                ])->collapsible(),
             ])
             ->filters([
                 TernaryFilter::make('has_english')
