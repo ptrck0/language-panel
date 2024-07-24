@@ -1,9 +1,10 @@
 <?php
 
 return [
+    //Your supported locales, the value is what is show in the UI.
     'locales' => [
-        'nl',
-        'en',
+        'nl' => 'NL',
+        'en' => 'EN',
     ],
     'import' => [
         'allow_truncate' => true,
