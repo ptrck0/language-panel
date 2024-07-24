@@ -9,7 +9,18 @@ return [
     'translation' => 'Vertaling',
     'updated_at' => 'Bijgewerkt op',
     'filter' => [
-        'has_english' => 'Heeft Engels',
-        'has_dutch' => 'Heeft Nederlands',
+        'has_en' => 'Heeft Engels',
+        'has_nl' => 'Heeft Nederlands',
     ],
+    'action' => [
+        'import' => 'Importeer uit project',
+        'form' => [
+            'truncate' => 'Maak vertaling-tabel eerst leeg',
+            'overwrite' => 'Overschrijf bestaande configuratie met data uit de bestanden',
+        ]
+    ],
+    'notification' => [
+        'processing_lang_files' => 'Een moment, de bestanden worden geimporteerd...',
+        'done_processing_lang_files' => 'De files zijn geimporteerd!',
+    ]
 ];

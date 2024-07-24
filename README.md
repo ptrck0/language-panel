@@ -46,7 +46,7 @@ you have imported.
 
 - [ ] Support vendor lines
 - [ ] Implement import and export, to excel for example.
-- [ ] Support other languages than English and Dutch.
+- [x] Support other languages than English and Dutch.
 
 ## Great alternatives
 
