@@ -2,6 +2,7 @@
 
 namespace Patrick\LanguagePanel\Resources;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Section;
@@ -12,11 +13,16 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Maatwebsite\Excel\Excel as ExcelFormat;
+use Maatwebsite\Excel\Facades\Excel;
+use Patrick\LanguagePanel\Exports\LanguageLineExport;
+use Patrick\LanguagePanel\Imports\LanguageLineImport;
 use Patrick\LanguagePanel\Jobs\ImportFromLangFiles;
 use Patrick\LanguagePanel\Resources\Helpers\FilterHelper;
 use Patrick\LanguagePanel\Resources\Helpers\TableHelper;
@@ -135,7 +141,25 @@ class LanguageLineResource extends Resource
                             ->success()
                             ->send()
                         ;
-                    }),
+                    })
+                    ->icon('heroicon-s-arrow-up-circle'),
+                ActionGroup::make([
+                    Action::make('download')
+                        ->action(fn() => Excel::download(new LanguageLineExport(), 'export.xlsx', ExcelFormat::XLSX)),
+                    Action::make('upload')
+                        ->form([
+                            FileUpload::make('importfile')
+                                ->acceptedFileTypes([
+                                    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                                    'application/vnd.ms-excel',
+                                ])
+                                ->previewable(false)
+                                ->storeFiles(false),
+                        ])
+                        ->action(function (array $data) {
+                            Excel::import(new LanguageLineImport(), $data['importfile']);
+                        }),
+                ])->button()->label('Import/Export')->icon('heroicon-m-table-cells'),
             ])
             ->bulkActions([])
         ;
