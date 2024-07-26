@@ -14,9 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Patrick\LanguagePanel\Jobs\ImportFromLangFiles;
 use Patrick\LanguagePanel\Resources\Helpers\FilterHelper;
@@ -57,57 +55,30 @@ class LanguageLineResource extends Resource
                                     ->deletable(config('language-panel.resource.form.delete_form_keyvalue', false)),
                             ]),
                     ]),
-            ]);
+            ])
+        ;
     }
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->label(__('language-panel::form.id'))
-                    ->searchable(),
-                TextColumn::make('group')
-                    ->label(__('language-panel::form.group'))
-                    ->searchable(),
-                TextColumn::make('key')
-                    ->label(__('language-panel::form.key'))
-                    ->searchable(),
-                ...TableHelper::makeIconColumns(fn (Model $record) => $record),
-                TextColumn::make('updated_at')
-                    ->date('d-m-Y')
-                    ->label(__('language-panel::form.updated_at')),
+                TextColumn::toggleAndSearchMacro('id', 'language-panel::form.id', true),
+                TextColumn::toggleAndSearchMacro('group', 'language-panel::form.group'),
+                TextColumn::toggleAndSearchMacro('key', 'language-panel::form.key'),
+                ...TableHelper::makeIconColumns(fn(Model $record) => $record),
+                TextColumn::dateMacro('updated_at', 'language-panel::form.updated_at', true),
             ])
             ->filters([
                 ...FilterHelper::makeFilters(),
-                /* TernaryFilter::make('has_english') */
-                /*     ->label(__('language-panel::form.filter.has_english')) */
-                /*     ->queries( */
-                /*         true: fn (Builder $query) => $query->whereNotNull('text->en'), */
-                /*         false: fn (Builder $query) => $query->orWhereNull('text->en') */
-                /*             ->orWhereJsonDoesntContain('text', 'en'), */
-                /*         blank: fn (Builder $query) => $query, */
-                /*     ) */
-                /*     ->trueLabel(__('language-panel::general.yes')) */
-                /*     ->falseLabel(__('language-panel::general.no')), */
-                /* TernaryFilter::make('has_dutch') */
-                /*     ->label(__('language-panel::form.filter.has_dutch')) */
-                /*     ->queries( */
-                /*         true: fn (Builder $query) => $query->whereNotNull('text->nl'), */
-                /*         false: fn (Builder $query) => $query->orWhereNull('text->nl') */
-                /*             ->orWhereJsonDoesntContain('text', 'nl'), */
-                /*         blank: fn (Builder $query) => $query, */
-                /*     ) */
-                /*     ->trueLabel(__('language-panel::general.yes')) */
-                /*     ->falseLabel(__('language-panel::general.no')), */
-            ], layout: FiltersLayout::AboveContent)
+            ], layout: FiltersLayout::Dropdown)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Action::make('update')
                     ->form([
                         Toggle::make('truncate'),
                         Toggle::make('overwrite'),
-                    ])->requiresConfirmation()
+                    ])->requiresConfirmation(),
             ])
             ->headerActions([
                 Action::make(__('language-panel::form.action.import'))
@@ -129,24 +100,26 @@ class LanguageLineResource extends Resource
                         Notification::make('processing')
                             ->title(__('language-panel::form.notification.processing_lang_files'))
                             ->info()
-                            ->send();
+                            ->send()
+                        ;
                         ImportFromLangFiles::dispatchSync(
                             $data['overwrite'],
-                            $data['truncate']
+                            $data['truncate'],
                         );
                         Notification::make('finished')
                             ->title(__('language-panel::form.notification.done_processing_lang_files'))
                             ->success()
-                            ->send();
-                    })
+                            ->send()
+                        ;
+                    }),
             ])
-            ->bulkActions([]);
+            ->bulkActions([])
+        ;
     }
 
     public static function getRelations(): array
     {
         return [
-            //
         ];
     }
 

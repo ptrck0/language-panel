@@ -21,12 +21,14 @@ class ImportFromLangFiles implements ShouldQueue
 
     /**
      * Create a new job instance.
+     *
+     * @param mixed $overwrite
+     * @param mixed $truncate
      */
     public function __construct(
         public $overwrite,
         public $truncate,
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -41,7 +43,10 @@ class ImportFromLangFiles implements ShouldQueue
 
         foreach ($langDirs as $langDir) {
             $dirName = basename($langDir);
-            if ($dirName == 'vendor' && config('language-panel.import.add_vendor')) {
+            if (
+                'vendor' == $dirName
+                && config('language-panel.import.add_vendor', false)
+            ) {
                 foreach (File::directories($langDir) as $vendorDir) {
                     $packageName = basename($vendorDir);
 
@@ -50,7 +55,12 @@ class ImportFromLangFiles implements ShouldQueue
                     foreach ($langfiles as $langFile) {
                         $content = File::getRequire($langFile->getPathname());
 
-                        $this->parseFileContents($content, $langFile, $langFile->getRelativePath(), $packageName);
+                        $this->parseFileContents(
+                            $content,
+                            $langFile,
+                            $langFile->getRelativePath(),
+                            $packageName,
+                        );
                     }
                 }
             } else {
@@ -70,7 +80,7 @@ class ImportFromLangFiles implements ShouldQueue
      * start processing the contents.
      */
     private function parseFileContents(
-        int|array $content,
+        array|int $content,
         object $langFile,
         string $localeName,
         ?string $groupNamePrefix = null,
@@ -79,8 +89,8 @@ class ImportFromLangFiles implements ShouldQueue
             foreach (Arr::dot($content) as $key => $value) {
                 if (is_string($value)) {
                     $groupName = Str::of($langFile->getRelativePathname())
-                        ->remove('.php');
-
+                        ->remove('.php')
+                    ;
 
                     if ($groupNamePrefix) {
                         $groupName = $groupNamePrefix . '::' . basename($groupName);
@@ -107,12 +117,13 @@ class ImportFromLangFiles implements ShouldQueue
         string $group,
         string $key,
         string $langName,
-        string $value
+        string $value,
     ): void {
         $langguageLine = LanguageLine::query()
             ->where('group', '=', $group)
             ->where('key', '=', $key)
-            ->first();
+            ->first()
+        ;
 
         if ($langguageLine) {
             $text = $langguageLine->text;

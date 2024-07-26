@@ -1,16 +1,16 @@
 <?php
 
 return [
-    //Your supported locales, the value is what is show in the UI.
+    // Your supported locales
     'locales' => [
-        'nl' => 'NL',
-        'en' => 'EN',
+        'nl',
+        'en',
     ],
     'import' => [
         'allow_truncate' => true,
         'allow_overwrite' => true,
-        //Not yet supported
-        'add_vendor' => false,
+        // Not yet supported
+        // 'add_vendor' => false,
     ],
     'resource' => [
         'form' => [
@@ -20,5 +20,6 @@ return [
             'add_form_keyvalue' => false,
             'delete_form_keyvalue' => false,
         ],
+        'allow_create_new' => false,
     ],
 ];

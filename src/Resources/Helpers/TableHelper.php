@@ -2,20 +2,22 @@
 
 namespace Patrick\LanguagePanel\Resources\Helpers;
 
-use Closure;
 use Filament\Tables\Columns\IconColumn;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class TableHelper
 {
-    public static function makeIconColumns(Closure $record)
+    public static function makeIconColumns(\Closure $record): array
     {
         $iconColumns = [];
-        collect(config('language-panel.locales'))->each(function ($name, $key) use (&$iconColumns) {
-            $iconColumns[] = IconColumn::make($key)
-                ->label($name)
+        collect(config('language-panel.locales'))->each(function ($locale) use (&$iconColumns) {
+            $iconColumns[] = IconColumn::make($locale)
+                ->label(Str::of($locale)->upper())
                 ->boolean()
-                ->state(fn (Model $record) => self::languageLineHasTranslation($key, $record));
+                ->toggleable()
+                ->state(fn(Model $record) => self::languageLineHasTranslation($locale, $record))
+            ;
         });
 
         return $iconColumns;
@@ -23,9 +25,8 @@ class TableHelper
 
     private static function languageLineHasTranslation(
         string $locale,
-        Model $record
+        Model $record,
     ): bool {
-
         if (array_key_exists($locale, $record->text)) {
             return ! empty($record->text[$locale]);
         }
