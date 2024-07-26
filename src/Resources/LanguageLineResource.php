@@ -16,6 +16,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 use Patrick\LanguagePanel\Jobs\ImportFromLangFiles;
 use Patrick\LanguagePanel\Resources\Helpers\FilterHelper;
 use Patrick\LanguagePanel\Resources\Helpers\TableHelper;
@@ -67,6 +68,29 @@ class LanguageLineResource extends Resource
                 TextColumn::toggleAndSearchMacro('group', 'language-panel::form.group'),
                 TextColumn::toggleAndSearchMacro('key', 'language-panel::form.key'),
                 ...TableHelper::makeIconColumns(fn(Model $record) => $record),
+                TextColumn::make('text')
+                    ->state(function (LanguageLine $record) {
+                        $state = [];
+                        foreach ($record->text as $text) {
+                            if (str($text)->length()) {
+                                $state[] = str($text)->words(3, '...');
+                            }
+                        }
+
+                        return Arr::join($state, ', ');
+                    })
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->tooltip(function (LanguageLine $record) {
+                        $state = [];
+                        foreach ($record->text as $text) {
+                            if (str($text)->length()) {
+                                $state[] = $text;
+                            }
+                        }
+
+                        return Arr::join($state, ', ');
+                    }),
                 TextColumn::dateMacro('updated_at', 'language-panel::form.updated_at', true),
             ])
             ->filters([
@@ -119,8 +143,7 @@ class LanguageLineResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-        ];
+        return [];
     }
 
     public static function getPages(): array
