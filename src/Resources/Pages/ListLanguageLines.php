@@ -13,7 +13,8 @@ class ListLanguageLines extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->visible(config('language-panel.resource.allow_create_new', false)),
         ];
     }
 }

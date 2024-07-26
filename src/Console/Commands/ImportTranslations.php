@@ -46,7 +46,6 @@ class ImportTranslations extends Command
 
             ImportFromLangFiles::dispatchSync($truncate, $overwriteConfirmed);
         } else {
-
             ImportFromLangFiles::dispatchSync($overwrite, $truncate);
         }
 
