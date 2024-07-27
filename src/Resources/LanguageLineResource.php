@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
@@ -26,6 +27,7 @@ use Patrick\LanguagePanel\Imports\LanguageLineImport;
 use Patrick\LanguagePanel\Jobs\ImportFromLangFiles;
 use Patrick\LanguagePanel\Resources\Helpers\FilterHelper;
 use Patrick\LanguagePanel\Resources\Helpers\TableHelper;
+use Patrick\LanguagePanel\Resources\Pages\CreateLanguageLine;
 use Patrick\LanguagePanel\Resources\Pages\EditLanguageLine;
 use Patrick\LanguagePanel\Resources\Pages\ListLanguageLines;
 use Spatie\TranslationLoader\LanguageLine;
@@ -57,7 +59,7 @@ class LanguageLineResource extends Resource
                                     ->label(__('language-panel::form.text'))
                                     ->keyLabel(__('language-panel::form.language'))
                                     ->valueLabel(__('language-panel::form.translation'))
-                                    ->editableKeys(config('language-panel.resource.form.edit_form_lang_key', false))
+                                    ->editableKeys(config('language-panel.resource.form.edit_form_keyvalue', false))
                                     ->addable(config('language-panel.resource.form.add_form_keyvalue', false))
                                     ->deletable(config('language-panel.resource.form.delete_form_keyvalue', false)),
                             ]),
@@ -115,19 +117,19 @@ class LanguageLineResource extends Resource
                     ->form([
                         Toggle::make('truncate')
                             ->label(__('language-panel::form.action.form.truncate'))
-                            ->visible(config('language-panel.import.allow_overwrite'))
+                            ->visible(config('language-panel.lang-import.allow_overwrite', false))
                             ->onColor('danger')
                             ->offColor('success'),
 
                         Toggle::make('overwrite')
                             ->label(__('language-panel::form.action.form.overwrite'))
-                            ->visible(config('language-panel.import.allow_truncate'))
+                            ->visible(config('language-panel.lang-import.allow_truncate', false))
                             ->onColor('danger')
                             ->offColor('success'),
                     ])
                     ->requiresConfirmation()
                     ->action(function (array $data) {
-                        Notification::make('processing')
+                        Notification::make('processing_lang')
                             ->title(__('language-panel::form.notification.processing_lang_files'))
                             ->info()
                             ->send()
@@ -136,7 +138,7 @@ class LanguageLineResource extends Resource
                             $data['overwrite'],
                             $data['truncate'],
                         );
-                        Notification::make('finished')
+                        Notification::make('finished_lang')
                             ->title(__('language-panel::form.notification.done_processing_lang_files'))
                             ->success()
                             ->send()
@@ -145,7 +147,8 @@ class LanguageLineResource extends Resource
                     ->icon('heroicon-s-arrow-up-circle'),
                 ActionGroup::make([
                     Action::make('download')
-                        ->action(fn() => Excel::download(new LanguageLineExport(), 'export.xlsx', ExcelFormat::XLSX)),
+                        ->action(fn() => Excel::download(new LanguageLineExport(), 'export.xlsx', ExcelFormat::XLSX))
+                        ->visible(config('language-panel.excel.allow_export')),
                     Action::make('upload')
                         ->form([
                             FileUpload::make('importfile')
@@ -155,13 +158,42 @@ class LanguageLineResource extends Resource
                                 ])
                                 ->previewable(false)
                                 ->storeFiles(false),
+
+                            Toggle::make('truncate')
+                                ->label(__('language-panel::form.action.form.truncate'))
+                                ->visible(config('language-panel.lang-import.allow_truncate', false))
+                                ->onColor('danger')
+                                ->offColor('success'),
                         ])
+                        ->requiresConfirmation()
                         ->action(function (array $data) {
+                            Notification::make('processing_import')
+                                ->title(__('language-panel::form.notification.processing_import_file'))
+                                ->info()
+                                ->send()
+                            ;
+
+                            if (Arr::exists($data, 'truncate') && $data['truncate']) {
+                                LanguageLine::query()->truncate();
+                            }
+
                             Excel::import(new LanguageLineImport(), $data['importfile']);
-                        }),
-                ])->button()->label('Import/Export')->icon('heroicon-m-table-cells'),
+
+                            Notification::make('finished_import')
+                                ->title(__('language-panel::form.notification.done_processing_import_file'))
+                                ->success()
+                                ->send()
+                            ;
+                        })
+                        ->visible(config('language-panel.excel.allow_import', false)),
+                ])->button()
+                    ->label('Import/Export')
+                    ->icon('heroicon-m-table-cells')
+                    ->visible(config('language-panel.excel.allow_all', false)),
             ])
-            ->bulkActions([])
+            ->bulkActions([
+                DeleteBulkAction::make()->visible(config('language-panel.resource.allow_delete', false)),
+            ])
         ;
     }
 
@@ -174,6 +206,7 @@ class LanguageLineResource extends Resource
     {
         return [
             'index' => ListLanguageLines::route('/'),
+            'create' => CreateLanguageLine::route('/create'),
             'edit' => EditLanguageLine::route('/{record}/edit'),
         ];
     }

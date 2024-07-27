@@ -29,7 +29,8 @@ php artisan migrate
 ```
 
 - Load your translations using artisan: `php artisan language-panel:import`.
-- Publish the configuration assets to further customize the options:
+- Publish the configuration assets to customize which functions of the panel
+can be used:
 `php artisan vendor:publish --tag=language-panel-config`.
 - Publish the translations if you would like to adjust them:
 `php artisan vendor:publish --tag=language-panel-lang`.
@@ -45,7 +46,6 @@ you have imported.
 ## Todo
 
 - [ ] Support vendor lines
-- [ ] Implement import and export, to excel for example.
 
 ## Great alternatives
 

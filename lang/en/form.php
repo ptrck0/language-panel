@@ -22,5 +22,7 @@ return [
     'notification' => [
         'processing_lang_files' => 'One moment, the files are being imported...',
         'done_processing_lang_files' => 'The files are imported!',
+        'processing_import_file' => 'One moment, the file is being processed',
+        'done_processing_import_file' => 'The file is processed!',
     ],
 ];

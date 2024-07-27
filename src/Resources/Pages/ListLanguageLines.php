@@ -14,7 +14,7 @@ class ListLanguageLines extends ListRecords
     {
         return [
             Actions\CreateAction::make()
-                ->visible(config('language-panel.resource.allow_create_new', false)),
+                ->visible(config('language-panel.resource.allow_create', false)),
         ];
     }
 }
