@@ -5,7 +5,7 @@ with.
 
 This package does three things:
 
-1.Loads translations from your `lang/` directory, and uses
+1. Loads translations from your `lang/` directory, and uses
 [Spatie's translation loader](https://github.com/spatie/laravel-translation-loader)
 to store and read your data.
 2. Provides you with a filament admin panel plugin to manage the loaded translations.
