@@ -2,10 +2,10 @@
 
 namespace Patrick\LanguagePanel\Imports;
 
-use Maatwebsite\Excel\Concerns\ToModel;
-use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Database\Eloquent\Model;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Spatie\TranslationLoader\LanguageLine;
 
 class LanguageLineImport implements ToModel, WithHeadingRow
 {

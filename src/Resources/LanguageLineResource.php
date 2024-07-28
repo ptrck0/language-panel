@@ -23,6 +23,8 @@ use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Excel as ExcelFormat;
 use Maatwebsite\Excel\Facades\Excel;
 use Patrick\LanguagePanel\Exports\LanguageLineExport;
+use Patrick\LanguagePanel\Filament\CustomColumns\DateColumn;
+use Patrick\LanguagePanel\Filament\CustomColumns\TextColumn as CustomTextColumn;
 use Patrick\LanguagePanel\Imports\LanguageLineImport;
 use Patrick\LanguagePanel\Jobs\ImportFromLangFiles;
 use Patrick\LanguagePanel\Resources\Helpers\FilterHelper;
@@ -36,7 +38,22 @@ class LanguageLineResource extends Resource
 {
     protected static ?string $model = LanguageLine::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-flag';
+
+    public static function getModelLabel(): string
+    {
+        return __('language-panel::resources.language-line.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('language-panel::resources.language-line.plural_label');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('language-panel::resources.language-line.navigation_label');
+    }
 
     public static function form(Form $form): Form
     {
@@ -72,9 +89,9 @@ class LanguageLineResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::toggleAndSearchMacro('id', 'language-panel::form.id', true),
-                TextColumn::toggleAndSearchMacro('group', 'language-panel::form.group'),
-                TextColumn::toggleAndSearchMacro('key', 'language-panel::form.key'),
+                CustomTextColumn::make('id', 'language-panel::form.id', true),
+                CustomTextColumn::make('group', 'language-panel::form.group'),
+                CustomTextColumn::make('key', 'language-panel::form.key'),
                 ...TableHelper::makeIconColumns(fn(Model $record) => $record),
                 TextColumn::make('text')
                     ->state(function (LanguageLine $record) {
@@ -99,7 +116,7 @@ class LanguageLineResource extends Resource
 
                         return Arr::join($state, ', ');
                     }),
-                TextColumn::dateMacro('updated_at', 'language-panel::form.updated_at', true),
+                DateColumn::make('updated_at', 'language-panel::form.updated_at', true),
             ])
             ->filters([
                 ...FilterHelper::makeFilters(),
@@ -146,10 +163,12 @@ class LanguageLineResource extends Resource
                     })
                     ->icon('heroicon-s-arrow-up-circle'),
                 ActionGroup::make([
-                    Action::make('download')
+                    Action::make(__('language-panel::form.action.download'))
+                        ->label(__('language-panel::form.action.download'))
                         ->action(fn() => Excel::download(new LanguageLineExport(), 'export.xlsx', ExcelFormat::XLSX))
-                        ->visible(config('language-panel.excel.allow_export')),
-                    Action::make('upload')
+                        ->visible(config('language-panel.excel.allow_export', false)),
+                    Action::make(__('language-panel::form.action.upload'))
+                        ->label(__('language-panel::form.action.upload'))
                         ->form([
                             FileUpload::make('importfile')
                                 ->acceptedFileTypes([
@@ -187,7 +206,7 @@ class LanguageLineResource extends Resource
                         })
                         ->visible(config('language-panel.excel.allow_import', false)),
                 ])->button()
-                    ->label('Import/Export')
+                    ->label(__('language-panel::form.action_group.upload_download'))
                     ->icon('heroicon-m-table-cells')
                     ->visible(config('language-panel.excel.allow_all', false)),
             ])

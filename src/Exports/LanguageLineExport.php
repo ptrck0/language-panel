@@ -2,11 +2,11 @@
 
 namespace Patrick\LanguagePanel\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Spatie\TranslationLoader\LanguageLine;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Spatie\TranslationLoader\LanguageLine;
 
 class LanguageLineExport implements FromCollection, WithHeadings, WithMapping
 {

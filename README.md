@@ -1,13 +1,22 @@
 # Language-panel
 
-A [FilamentPHP](https://filamentphp.com/) to load and manage translations with.
+A [FilamentPHP](https://filamentphp.com/) plugin to load and manage translations
+with.
 
-This package does two things:
+This package does three things:
 
-1. It loads translations from your `lang/` directory, and uses
+1.Loads translations from your `lang/` directory, and uses
 [Spatie's translation loader](https://github.com/spatie/laravel-translation-loader)
 to store and read your data.
-2. It provides you with a filament admin panel plugin to manage the loaded translations.
+2. Provides you with a filament admin panel plugin to manage the loaded translations.
+3. Provides you with the option to download the translations in excel format,
+edit them, and upload them again.
+
+## Screenshots
+
+![index](https://i.imgur.com/DYWGmuh.png)
+![upload](https://i.imgur.com/cGkFfxF.png)
+![import](https://i.imgur.com/Syemuma.png)
 
 ## Installation
 

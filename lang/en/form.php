@@ -18,6 +18,11 @@ return [
             'truncate' => 'Truncate language-table first',
             'overwrite' => 'Overwrite existing data with data from files',
         ],
+        'upload' => 'Upload Spreadsheet',
+        'download' => 'Download Spreadsheet',
+    ],
+    'action_group' => [
+        'upload_download' => 'Upload/Download',
     ],
     'notification' => [
         'processing_lang_files' => 'One moment, the files are being imported...',

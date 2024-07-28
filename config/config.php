@@ -17,19 +17,19 @@ return [
         'allow_truncate' => true,
         'allow_overwrite' => true,
         // Not yet supported.
-        // 'add_vendor' => false,
+        // 'add_vendor' => true,
     ],
     'resource' => [
         // Control the form actions that can be done.
         'form' => [
-            'edit_form_group' => false,
-            'edit_form_key' => false,
-            'add_form_keyvalue' => false,
-            'edit_form_keyvalue' => false,
-            'delete_form_keyvalue' => false,
+            'edit_form_group' => true,
+            'edit_form_key' => true,
+            'add_form_keyvalue' => true,
+            'edit_form_keyvalue' => true,
+            'delete_form_keyvalue' => true,
         ],
         // Allow creation or deletion of language line in resource.
-        'allow_create' => false,
-        'allow_delete' => false,
+        'allow_create' => true,
+        'allow_delete' => true,
     ],
 ];

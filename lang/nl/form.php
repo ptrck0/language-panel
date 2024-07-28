@@ -18,6 +18,11 @@ return [
             'truncate' => 'Maak vertaling-tabel eerst leeg',
             'overwrite' => 'Overschrijf bestaande configuratie met data uit de bestanden',
         ],
+        'upload' => 'Upload Spreadsheet',
+        'download' => 'Download Spreadsheet',
+    ],
+    'action_group' => [
+        'import_export' => 'Upload/Download',
     ],
     'notification' => [
         'processing_lang_files' => 'Een moment, de bestanden worden geimporteerd...',
