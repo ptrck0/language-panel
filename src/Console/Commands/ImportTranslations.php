@@ -29,8 +29,8 @@ class ImportTranslations extends Command
      */
     public function handle()
     {
-        $overwriteAllowed = config('language-panel.import.allow_overwrite', false);
-        $truncateAllowed = config('language-panel.import.allow_truncate', false);
+        $overwriteAllowed = config('language-panel.lang-import.allow_overwrite', false);
+        $truncateAllowed = config('language-panel.lang-import.allow_truncate', false);
 
         $overwrite = $this->option('overwrite');
         $truncate = $this->option('truncate');

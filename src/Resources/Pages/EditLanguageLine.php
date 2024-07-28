@@ -13,7 +13,7 @@ class EditLanguageLine extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->visible(config('language-panel.resource.allow_delete', false)),
         ];
     }
 }

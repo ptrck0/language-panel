@@ -45,7 +45,7 @@ class ImportFromLangFiles implements ShouldQueue
             $dirName = basename($langDir);
             if (
                 'vendor' == $dirName
-                && config('language-panel.import.add_vendor', false)
+                && config('language-panel.lang-import.add_vendor', false)
             ) {
                 foreach (File::directories($langDir) as $vendorDir) {
                     $packageName = basename($vendorDir);

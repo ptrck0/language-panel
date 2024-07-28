@@ -2,7 +2,6 @@
 
 namespace Patrick\LanguagePanel;
 
-use Filament\Tables\Columns\TextColumn;
 use Illuminate\Support\ServiceProvider;
 use Patrick\LanguagePanel\Console\Commands\ImportTranslations;
 
@@ -25,22 +24,6 @@ class LanguagePanelServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../lang' => $this->app->langPath('vendor/language-panel'),
         ], 'language-panel-lang');
-
-        TextColumn::macro('toggleAndSearchMacro', function ($name, $translationKey, $hidden = false) {
-            return static::make($name)
-                ->label(__($translationKey))
-                ->searchable()
-                ->toggleable(isToggledHiddenByDefault: $hidden)
-            ;
-        });
-
-        TextColumn::macro('dateMacro', function ($name, $translationKey, $hidden = false) {
-            return static::make($name)
-                ->date('d-m-Y')
-                ->toggleable(isToggledHiddenByDefault: $hidden)
-                ->label(__($translationKey))
-            ;
-        });
     }
 
     public function register()
