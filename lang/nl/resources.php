@@ -5,5 +5,6 @@ return [
         'label' => 'Vertaling',
         'plural_label' => 'Vertalingen',
         'navigation_label' => 'Vertalingen',
+        'navigation_group' => 'Vertalingen',
     ],
 ];
