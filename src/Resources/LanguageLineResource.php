@@ -55,6 +55,11 @@ class LanguageLineResource extends Resource
         return __('language-panel::resources.language-line.navigation_label');
     }
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('language-panel::resources.language-line.navigation_group');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
