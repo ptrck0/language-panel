@@ -3,10 +3,10 @@
     "description": "FilamentPHP plugin to manage translations with.",
     "license": "MIT",
     "require": {
-        "filament/filament": "^3.2",
-        "spatie/laravel-translation-loader": "^2.8",
-        "laravel/framework": "^11.16",
-        "maatwebsite/excel": "^3.1"
+        "filament/filament": "^4.1",
+        "spatie/laravel-translation-loader": "^2.8.2",
+        "laravel/framework": ">=11.28",
+        "maatwebsite/excel": "^3.1.67"
     },
     "autoload": {
         "psr-4": {
@@ -26,6 +26,6 @@
         }
     ],
     "require-dev": {
-        "laravel/pint": "^1.16"
+        "laravel/pint": "^1.25.1"
     }
 }

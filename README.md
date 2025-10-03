@@ -21,19 +21,10 @@ edit them, and upload them again.
 ## Installation
 
 - Install this package: `composer require patrick/language-panel`
-- Add Spatie's translation loader to your `config/app.php` file:
-
-```php
-    'providers' => Illuminate\Support\ServiceProvider::defaultProviders()
-        ->replace([
-            Illuminate\Translation\TranslationServiceProvider::class => Spatie\TranslationLoader\TranslationServiceProvider::class,
-        ])->toArray(),
-```
-
 - Publish the migrations of Spatie's package and run them:
 
 ```bash
-php artisan vendor:publish --provider="Spatie\TranslationLoader\TranslationServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Spatie\TranslationLoader\TranslationServiceProvider"
 php artisan migrate
 ```
 

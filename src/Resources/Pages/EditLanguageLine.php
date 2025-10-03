@@ -2,6 +2,7 @@
 
 namespace Patrick\LanguagePanel\Resources\Pages;
 
+use Filament\Actions\DeleteAction;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Patrick\LanguagePanel\Resources\LanguageLineResource;
@@ -13,7 +14,7 @@ class EditLanguageLine extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()->visible(config('language-panel.resource.allow_delete', false)),
+            DeleteAction::make()->visible(config('language-panel.resource.allow_delete', false)),
         ];
     }
 }
