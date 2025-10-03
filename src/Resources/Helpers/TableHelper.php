@@ -2,13 +2,14 @@
 
 namespace Patrick\LanguagePanel\Resources\Helpers;
 
+use Closure;
 use Filament\Tables\Columns\IconColumn;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class TableHelper
 {
-    public static function makeIconColumns(\Closure $record): array
+    public static function makeIconColumns(Closure $record): array
     {
         $iconColumns = [];
         collect(config('language-panel.locales'))->each(function ($locale) use (&$iconColumns) {

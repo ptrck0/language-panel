@@ -2,19 +2,19 @@
 
 namespace Patrick\LanguagePanel\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
@@ -38,7 +38,7 @@ class LanguageLineResource extends Resource
 {
     protected static ?string $model = LanguageLine::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-flag';
+    protected static null|\BackedEnum|string $navigationIcon = 'heroicon-o-flag';
 
     public static function getModelLabel(): string
     {
@@ -60,10 +60,10 @@ class LanguageLineResource extends Resource
         return __('language-panel::resources.language-line.navigation_group');
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Grid::make()
                     ->schema([
                         Section::make()
@@ -85,7 +85,7 @@ class LanguageLineResource extends Resource
                                     ->addable(config('language-panel.resource.form.add_form_keyvalue', false))
                                     ->deletable(config('language-panel.resource.form.delete_form_keyvalue', false)),
                             ]),
-                    ]),
+                    ])->columnSpanFull(),
             ])
         ;
     }
@@ -126,17 +126,17 @@ class LanguageLineResource extends Resource
             ->filters([
                 ...FilterHelper::makeFilters(),
             ], layout: FiltersLayout::Dropdown)
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
                 Action::make('update')
-                    ->form([
+                    ->schema([
                         Toggle::make('truncate'),
                         Toggle::make('overwrite'),
                     ])->requiresConfirmation(),
             ])
             ->headerActions([
                 Action::make(__('language-panel::form.action.import'))
-                    ->form([
+                    ->schema([
                         Toggle::make('truncate')
                             ->label(__('language-panel::form.action.form.truncate'))
                             ->visible(config('language-panel.lang-import.allow_overwrite', false))
@@ -174,7 +174,7 @@ class LanguageLineResource extends Resource
                         ->visible(config('language-panel.excel.allow_export', false)),
                     Action::make(__('language-panel::form.action.upload'))
                         ->label(__('language-panel::form.action.upload'))
-                        ->form([
+                        ->schema([
                             FileUpload::make('importfile')
                                 ->acceptedFileTypes([
                                     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -215,7 +215,7 @@ class LanguageLineResource extends Resource
                     ->icon('heroicon-m-table-cells')
                     ->visible(config('language-panel.excel.allow_all', false)),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 DeleteBulkAction::make()->visible(config('language-panel.resource.allow_delete', false)),
             ])
         ;
